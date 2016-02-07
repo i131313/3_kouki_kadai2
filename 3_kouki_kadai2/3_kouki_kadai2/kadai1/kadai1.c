@@ -27,7 +27,7 @@ int main(void)
 {
 	char houhou;
 	printf("’Tõ•û–@‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢([‚³:d, •:b):");
-	scanf("%s",&houhou);
+	scanf("%c",&houhou);
 
 	switch(houhou)
 	{
