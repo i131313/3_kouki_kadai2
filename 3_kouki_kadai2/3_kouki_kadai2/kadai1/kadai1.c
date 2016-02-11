@@ -1,17 +1,9 @@
 #include<stdio.h>
+#include<conio.h>
 
 #define N 8
 /* プリントの無向グラフ[行列ともに0番目の要素は使用しないことにする] */
- int m[N+1][N+1] = { {0, 0, 0, 0, 0, 0, 0, 0, 0},
-					 {0, 1, 1, 1, 1, 0, 0, 0, 0},
-					 {0, 1, 1, 0, 1, 0, 0, 0, 0},
-					 {0, 1, 0, 1, 0, 1, 1, 0, 0},
-					 {0, 1, 1, 0, 1, 0, 1, 0, 0},
-					 {0, 0, 0, 1, 0, 1, 1, 1, 1},
-					 {0, 0, 0, 1, 1, 1, 1, 0, 0},
-					 {0, 0, 0, 0, 0, 1, 0, 1, 0},
-					 {0, 0, 0, 0, 0, 1, 0, 0, 1}};
-
+ 
  /* ノード訪問フラグ0 = 未訪問, 1 = 訪問済み*/
  int v[N+1];
 
@@ -20,14 +12,53 @@
  int head = 0; // 先頭データのインデックス
  int tail = 0; // 終端データのインデックス
 
- void depth(int);
- void breadth(void);
+ void depth(int, int a[][N+1]);
+ void breadth(int[][N+1]);
 
 int main(void)
 {
 	char houhou;
+	int i,j;
+	int a[N+1][N+1];
+   
+	printf("グラフを隣接行列表現で入力してください\n(i×j行列 辺(i,j)が存在すれば1,そうでなければ0）\n");
+	printf("ノードは8個です\n\n");
+	printf("※1行目と1列目は「0」がすでに入力されています");
+	//do{
+	for(i = 0; i <= N; i++) 
+	{
+		a[0][i] = 0;
+		a[i][0] = 0;
+	}
+	
+	modoru:
+    for(i=1;i<=N;i++){
+	    printf("\n\n%dつ目のノードについて入力してください\n",i);
+    for(j=1;j<=N;j++){
+        a[i][j] = getche();
+	    if(a[i][j] == 48) a[i][j] = 0;
+	    else if(a[i][j] == 49) a[i][j] = 1;
+	    else 
+	    {
+		 printf("入力しなおしてください"); goto modoru;
+	    }
+	}
+	}
+	
+	//}while(i<N);
+	printf("\n\n探索するグラフの隣接行列表現\n");
+	for(i=0; i<=N; i++)
+	{
+		for(j = 0; j<=N;j++)
+		{
+			printf("%d",a[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n\n");
+
 	printf("探索方法を選択してください(深さ:d, 幅:b):");
-	scanf("%c",&houhou);
+	scanf(" %c",&houhou);
 
 	switch(houhou)
 	{
@@ -38,20 +69,21 @@ int main(void)
 				for(i = 1; i <= N; i++)
 		     	    v[i] = 0;
 
-				depth( 1 ); // 出発点をノード 1として探索開始
+				depth( 1 , a); // 出発点をノード 1として探索開始
 			}
 			break;
 
 		case 'b':
-			breadth();
+			breadth(a);
 			break;
 
 	}
+	printf("\n");
 	return 0;
 
 }
 
-void depth(int num)
+void depth(int num, int a[][N+1])
 {
 	int i;
 
@@ -64,16 +96,16 @@ void depth(int num)
 	for( i = 0; i <= N; i++)
 	{
 		/* ノードから出る辺とその先のノードの訪問状況をチェック */
-		if( m[num][i] == 1 && v[i] == 0)
+		if( a[num][i] == 1 && v[i] == 0)
 		 {
 			/* 未訪問であれば訪問する */
 			 printf("ノード %d から%d を訪問\n", num, i);
-			 depth( i ); //depth の再帰呼び出し
+			 depth( i, a ); //depth の再帰呼び出し
 		}
 	}
 }
 
-void breadth(void)
+void breadth(int a[][N+1])
 {
 	int i, j;
 
@@ -93,7 +125,7 @@ void breadth(void)
 		 for( j = 1; j <= N; j++)
 		 {
 			 /* ノードから出る辺とその先のノードの訪問状況をチェック*/
-			 if( m[i][j] == 1 && v[j] == 0)
+			 if( a[i][j] == 1 && v[j] == 0)
 			 {
 				 /* 未訪問であれキューに入れる*/
 				 queue[tail++] = j;
@@ -101,7 +133,8 @@ void breadth(void)
 			 }
 		 }
 		// 訪問状況の表示
-		printf("->%d", i);
+		printf("%d  ", i);
+		if(i!=N) printf("-> ");
 		} while ( head != tail );
 
 	 printf("\n");
