@@ -2,7 +2,6 @@
 #include<conio.h>
 
 #define N 8
-/* プリントの無向グラフ[行列ともに0番目の要素は使用しないことにする] */
  
  /* ノード訪問フラグ0 = 未訪問, 1 = 訪問済み*/
  int v[N+1];
@@ -31,9 +30,9 @@ int main(void)
 		a[i][0] = 0;
 	}
 	
-	modoru:
+	
     for(i=1;i<=N;i++){
-	    printf("\n\n%dつ目のノードについて入力してください\n",i);
+	 modoru:   printf("\n\n%dつ目のノードについて入力してください\n",i);
     for(j=1;j<=N;j++){
         a[i][j] = getche();
 	    if(a[i][j] == 48) a[i][j] = 0;
@@ -64,12 +63,14 @@ int main(void)
 	{
 		case 'd':
 			{
-				int i;
+				int i,start;
+				printf("どのノードから探索しますか？:");
+				scanf("%d",&start);
 				/* 訪問フラグを初期化する */
 				for(i = 1; i <= N; i++)
 		     	    v[i] = 0;
 
-				depth( 1 , a); // 出発点をノード 1として探索開始
+				depth( start , a); // 出発点をノード 1として探索開始
 			}
 			break;
 
@@ -107,16 +108,19 @@ void depth(int num, int a[][N+1])
 
 void breadth(int a[][N+1])
 {
-	int i, j;
+	int i, j,start;
+
+	printf("どのノードから探索しますか？:");
+	scanf("%d",&start);
 
 	/* 訪問フラグを初期化する*/
 	for( i = 1; i <= N; i++)
 		v[i] = 0;
 
 	/* 探索開始*/
-	// 出発点であるノード1をキューに入れる
-	queue[tail++] = 1;
-	v[1] = 1; // 訪問済みにしておく
+	// 出発点であるノードをキューに入れる
+	queue[tail++] = start;
+	v[start] = 1; // 訪問済みにしておく
 
 	 /* キューが空になるまで繰り返す*/
 	 do{
